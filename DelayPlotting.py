@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pylab as plt
 
-def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "list[str]", titel: str, saveLocation = None):
+def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "list[str]", titel: str):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_xlabel('min')
@@ -11,12 +11,9 @@ def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "lis
         delayList = forsinkelser[i].to_list()
         ax.hist(delayList, label=grafTitler[i], density=True, bins=150, range=(-50, 100), histtype='step', cumulative=True)
     ax.legend(bbox_to_anchor=(0.9,0.3))
-    if saveLocation == None:
-        plt.show()
-    else:
-        plt.savefig(f"{saveLocation}/{titel}")
+    return fig, ax
 
-def plotGnsForsinkelse(forsinkelser: "list[pd.Series]", soejleTitler: "list[str]", titel: str, saveLocation = None):
+def plotGnsForsinkelse(forsinkelser: "list[pd.Series]", soejleTitler: "list[str]", titel: str):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_ylabel("min")
@@ -26,7 +23,4 @@ def plotGnsForsinkelse(forsinkelser: "list[pd.Series]", soejleTitler: "list[str]
         positiveForsinkelser = forsinkelser[i][forsinkelser[i] > 0]
         gnsForsinkelse.append(positiveForsinkelser.sum()/forsinkelser[i].size)
     ax.bar(soejleTitler, gnsForsinkelse)
-    if saveLocation == None:
-        plt.show()
-    else:
-        plt.savefig(f"{saveLocation}/{titel}")
+    return fig, ax

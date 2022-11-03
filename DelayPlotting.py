@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pylab as plt
 
-def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "list[str]", titel: str):
+def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "list[str]", titel: str, saveLocation = None):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.set_xlabel('min')
@@ -11,4 +11,7 @@ def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "lis
         ax.hist(delayList, label=grafTitler[i], density=True, bins=150, range=(-50, 100), histtype='step', cumulative=True)
     ax.legend(bbox_to_anchor=(0.9,0.3))
     ax.set_title(titel)
-    plt.show()
+    if saveLocation == None:
+        plt.show()
+    else:
+        plt.savefig(f"{saveLocation}/{titel}")

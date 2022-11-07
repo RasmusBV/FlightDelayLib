@@ -11,9 +11,10 @@ def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "lis
     histogrammer: "list[tuple[list[list[float]], list[float], pd.BarContainer | list]]" = []
     for i in range(len(forsinkelser)):
         delayList = forsinkelser[i].to_list()
-        histogram, bin_edges = np.histogram(delayList, density=True, bins=150, range=(-20, 100))
-        histogram = np.cumsum(histogram)
-        ax.plot(bin_edges[1:], histogram, label = grafTitler[i])
+        density, bins = np.histogram(delayList, density=True, bins=150, range=(-20, 100))
+        unity_density = density / density.sum()
+        unity_density = np.cumsum(unity_density)
+        ax.plot(bins[1:], unity_density, label = grafTitler[i])
     ax.legend(bbox_to_anchor=(0.9,0.3))
     return histogrammer
 

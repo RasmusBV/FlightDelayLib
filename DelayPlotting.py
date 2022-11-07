@@ -11,7 +11,9 @@ def plotKumulativSandsynlighed(forsinkelser: "list[pd.Series]", grafTitler: "lis
     histogrammer: "list[tuple[list[list[float]], list[float], pd.BarContainer | list]]" = []
     for i in range(len(forsinkelser)):
         delayList = forsinkelser[i].to_list()
-        histogrammer.append(ax.hist(delayList, label=grafTitler[i], density=True, bins=150, range=(-20, 100), histtype='step', cumulative=True))
+        histogram, bin_edges = np.histogram(delayList, density=True, bins=150, range=(-20, 100))
+        histogram = np.cumsum(histogram)
+        ax.plot(bin_edges[1:], histogram, label = grafTitler[i])
     ax.legend(bbox_to_anchor=(0.9,0.3))
     return histogrammer
 
@@ -31,7 +33,6 @@ def plotKumulativSandsynlighedForskel(forsinkelse1: pd.Series, grafTitel1: str, 
     histogrammer = plotKumulativSandsynlighed([forsinkelse1, forsinkelse2], ["a", "b"], "b")
     plt.clf()
     forskel = np.divide(histogrammer[0][0], histogrammer[1][0])
-    print(len(forskel))
     titel = f"{grafTitel1} i forhold til {grafTitel2}"
     fig = plt.figure()
     ax = fig.add_subplot(111)
